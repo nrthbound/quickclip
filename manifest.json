@@ -1,5 +1,5 @@
 {
-    "name": "mutey",
+    "name": "QuickClip",
     "author": "Travis Ray",
     "entry": "dist/extension.js",
     "version": "1.0.0",

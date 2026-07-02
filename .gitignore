@@ -11,3 +11,5 @@ dist/
 README.md
 
 vendor/
+docs/
+.tmp/
