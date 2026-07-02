@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Extension Dialog</title>
+  <script>
+    const isWebKit = window.webkit?.messageHandlers?.live;
+    const isWebView2 = window.chrome?.webview;
+
+    function sendMessage(message) {
+      if (isWebKit) {
+        window.webkit.messageHandlers.live.postMessage(message);
+      } else if (isWebView2) {
+        window.chrome.webview.postMessage(message);
+      }
+    }
+
+    function closeWithResult(result) {
+      // The SDK expects this specific message structure to close the dialog
+      sendMessage({
+        method: "close_and_send",
+        params: [JSON.stringify(result)]
+      });
+    }
+  </script>
+  <style>
+    :root {
+      --ableton-bg: #383838;
+      --ableton-panel: #4E4E4E;
+      --ableton-button: #FFA500;
+      --ableton-text: #FFFFFF;
+      --ableton-border: #2C2C2C;
+      --ableton-input-bg: #2C2C2C;
+    }
+
+    body {
+      background-color: var(--ableton-panel);
+      color: var(--ableton-text);
+      font-family: sans-serif;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    button {
+      background-color: var(--ableton-button);
+      border: none;
+      padding: 8px 16px;
+      cursor: pointer;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <h1>Create MIDI Clip</h1>
+  <label for="clipLength">Clip Length</label>
+  <select id="clipLength">
+    <option value="8">2 Bars</option>
+    <option value="16" selected>4 Bars</option>
+    <option value="32">8 Bars</option>
+    <option value="64">16 Bars</option>
+  </select>
+  <label>
+    <input type="checkbox" id="looping" />
+    Enable Looping
+  </label>
+  <button onclick="confirm()">
+    Create Clip
+  </button>
+  <script>
+    function confirm() {
+      const bars = parseInt(document.getElementById('clipLength').value);
+      const looping = document.getElementById('looping').checked;
+      closeWithResult({ bars, looping });
+    }
+  </script>
+</body>
+</html>
